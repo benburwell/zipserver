@@ -10,11 +10,9 @@ import (
 
 func main() {
 	db := getInitializedDatabase()
-
 	http.HandleFunc("/zip/", func(w http.ResponseWriter, r *http.Request) {
 		handleZipcodeRequest(w, r, db)
 	})
-
 	http.ListenAndServe(getListeningAddress(), nil)
 }
 
@@ -24,7 +22,6 @@ func getInitializedDatabase() *ZipcodeDatabase {
 	if err != nil {
 		fmt.Printf("%s\n", err)
 	}
-
 	return db
 }
 
@@ -33,12 +30,12 @@ func getListeningAddress() string {
 	if port == "" {
 		port = "8080"
 	}
-
 	return strings.Join([]string{
 		":",
 		port,
 	}, "")
 }
+
 func handleZipcodeRequest(response http.ResponseWriter, request *http.Request, db *ZipcodeDatabase) {
 	zip := zipcodeForRequest(request)
 	if details := db.Find(zip); details == nil {
