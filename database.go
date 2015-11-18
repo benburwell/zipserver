@@ -37,15 +37,9 @@ func (db *ZipcodeDatabase) LoadFromCSV(filename string) error {
 	if err != nil {
 		return err
 	}
-
 	for _, row := range zips {
-		details, err := getDetailsFromRow(row)
-		if err != nil {
-			return err
-		}
-		db.Insert(row[0], details)
+		db.Insert(row[0], getDetailsFromRow(row))
 	}
-
 	return nil
 }
 
@@ -55,32 +49,28 @@ func getZipsFromFile(filename string) ([][]string, error) {
 		return nil, err
 	}
 	defer reader.Close()
-
 	csvReader := csv.NewReader(reader)
 	zips, err := csvReader.ReadAll()
 	if err != nil {
 		return nil, err
 	}
-
 	return zips, nil
 }
 
-func getDetailsFromRow(row []string) (*ZipcodeDetails, error) {
-	lat, err := strconv.ParseFloat(strings.TrimSpace(row[2]), 64)
+func getFloat(stringVal string) float64 {
+	floatVal, err := strconv.ParseFloat(strings.TrimSpace(stringVal), 64)
 	if err != nil {
-		return nil, err
+		return 0
+	} else {
+		return floatVal
 	}
-	lon, err := strconv.ParseFloat(strings.TrimSpace(row[3]), 64)
-	if err != nil {
-		return nil, err
-	}
+}
 
-	zip := &ZipcodeDetails{
+func getDetailsFromRow(row []string) *ZipcodeDetails {
+	return &ZipcodeDetails{
 		State:     row[1],
-		Latitude:  lat,
-		Longitude: lon,
+		Latitude:  getFloat(row[2]),
+		Longitude: getFloat(row[3]),
 		City:      row[4],
 	}
-
-	return zip, nil
 }
