@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
+	"strings"
 )
 
 func main() {
@@ -13,7 +15,7 @@ func main() {
 		handleZipcodeRequest(w, r, db)
 	})
 
-	http.ListenAndServe(":8080", nil)
+	http.ListenAndServe(getListeningAddress(), nil)
 }
 
 func getInitializedDatabase() *ZipcodeDatabase {
@@ -26,6 +28,17 @@ func getInitializedDatabase() *ZipcodeDatabase {
 	return db
 }
 
+func getListeningAddress() string {
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+
+	return strings.Join([]string{
+		":",
+		port,
+	}, "")
+}
 func handleZipcodeRequest(response http.ResponseWriter, request *http.Request, db *ZipcodeDatabase) {
 	zip := zipcodeForRequest(request)
 	if details := db.Find(zip); details == nil {
