@@ -1,6 +1,8 @@
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/benburwell/zipserver)
+
 # Usage
 
-To run the server on port 8080:
+To run the server on port 8080 (set the `PORT` environment variable to override):
 
 ```sh
 go build .

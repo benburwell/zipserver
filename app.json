@@ -1,0 +1,15 @@
+{
+  "name": "zipserver",
+  "description": "A simple JSON API server written in Go from which to get ZIP code geolocation data.",
+  "keywords": [
+    "zipcode",
+    "zip",
+    "json",
+    "api",
+    "go",
+    "golang"
+  ],
+  "website": "https://github.com/benburwell/zipserver",
+  "repository": "https://github.com/benburwell/zipserver",
+  "success_url": "/zip/10001"
+}
