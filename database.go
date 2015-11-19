@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/csv"
+	"math"
 	"os"
 	"strconv"
 	"strings"
@@ -12,6 +13,24 @@ type ZipcodeDetails struct {
 	Longitude float64 `json:"longitude"`
 	City      string  `json:"city"`
 	State     string  `json:"state"`
+}
+
+const EarthRadiusMiles float64 = 3960
+const EarthRadiusKm float64 = 6373
+const DegToRad float64 = math.Pi / 180
+
+func (zip1 *ZipcodeDetails) DistanceTo(zip2 *ZipcodeDetails) (float64, float64) {
+	// the arc distance ψ = arccos(sin φ_1 sin φ_2 cos(θ_1-θ_2) + cos φ_1 cos φ_2)
+	// where
+	//		φ_k = 90° - latitude_k
+	//		θ_k = longitude_k
+	// (both in radians)
+	theta1 := zip1.Longitude * DegToRad
+	theta2 := zip2.Longitude * DegToRad
+	phi1 := (90 - zip1.Latitude) * DegToRad
+	phi2 := (90 - zip2.Latitude) * DegToRad
+	arc := math.Acos(math.Sin(phi1)*math.Sin(phi2)*math.Cos(theta1-theta2) + math.Cos(phi1)*math.Cos(phi2))
+	return arc * EarthRadiusMiles, arc * EarthRadiusKm
 }
 
 type ZipcodeDatabase struct {
