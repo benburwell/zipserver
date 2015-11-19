@@ -18,7 +18,7 @@ func main() {
 
 func getInitializedDatabase() *ZipcodeDatabase {
 	db := NewZipcodeDatabase()
-	err := db.LoadFromCSV("./zips.csv")
+	err := db.LoadFromCSV("zips.csv")
 	if err != nil {
 		fmt.Printf("%s\n", err)
 	}
